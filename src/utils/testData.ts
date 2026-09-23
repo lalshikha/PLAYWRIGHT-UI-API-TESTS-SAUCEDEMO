@@ -2,6 +2,7 @@
 
 export type TestData = {
   saucedemoUrl: string; 
+  saucedemoInventoryUrl: string;
   googleUrl: string;
 };
 
@@ -12,8 +13,10 @@ export const saucedemoUrl =
   'https://www.saucedemo.com/';
 
 export const googleUrl = process.env.GOOGLE_URL ?? 'https://www.google.com/';
+export const saucedemoInventoryUrl = `${saucedemoUrl.replace(/\/$/, '')}/inventory.html`;
 
 export const testData: TestData = {
   saucedemoUrl,
+  saucedemoInventoryUrl,
   googleUrl,
 };

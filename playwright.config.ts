@@ -9,6 +9,10 @@ dotenv.config({ path: envFile });
 console.log(`Loaded environment variables from ${envFile}`);
 
 const RETRIES = Number(process.env.PW_RETRIES ?? (process.env.CI ? 1 : 0));
+const storageStatePath = path.resolve(
+  process.cwd(),
+  process.env.STORAGE_STATE_PATH || './src/test-data/storageState.json',
+);
 
 const testDir = defineBddConfig({
   features: ['src/features/**/*.feature'],
@@ -42,8 +46,19 @@ export default defineConfig({
   },
   projects: [
     {
-      name: 'chromium',
+      name: 'storage-state-setup',
+      testDir: path.resolve(process.cwd(), 'tests'),
+      testMatch: '**/loginStorageState.spec.ts',
       use: { ...devices['Desktop Chrome'] },
+    },
+    {
+      name: 'chromium',
+      dependencies: ['storage-state-setup'],
+      testIgnore: '**/loginStorageState.spec.ts',
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: storageStatePath,
+      },
     },
   ],
 });
