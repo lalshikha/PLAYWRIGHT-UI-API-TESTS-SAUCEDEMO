@@ -22,7 +22,9 @@ jobs:
         run: npm ci
 
       - name: Install Playwright Browsers
-        run: npx playwright install --with-deps chromium
+        run: |
+          sudo apt-get --yes remove --purge man-db
+          npx playwright install --with-deps chromium --only-shell
 
       - name: Run Playwright tests
         run: npx playwright test --project=chromium
