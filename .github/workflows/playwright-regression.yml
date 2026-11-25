@@ -1,0 +1,36 @@
+name: Playwright Regression Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch: # Lets you manually trigger runs from the GitHub Actions tab
+
+jobs:
+  regression-tests:
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run Playwright tests
+        run: npx playwright test --project=chromium
+
+      - name: Upload JSON Report Artifact
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }} # Ensures the report uploads even when tests fail
+        with:
+          name: playwright-json-report
+          path: test-results/results.json
+          retention-days: 30

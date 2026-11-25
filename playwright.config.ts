@@ -36,6 +36,7 @@ export default defineConfig({
     ['html'],
     ['junit', { outputFile: 'reports/junit-results.xml' }],
     ['./src/reporters/flaky-reporter.ts'],
+    ['json', { outputFile: 'test-results/results.json' }],
   ],
   use: {
     baseURL: process.env.APP_URL || 'http://localhost:3000',
@@ -48,7 +49,8 @@ export default defineConfig({
     {
       name: 'storage-state-setup',
       testDir: path.resolve(process.cwd(), 'tests'),
-      testMatch: '**/loginStorageState.spec.ts',
+      // testMatch: '**/loginStorageState.spec.ts',
+      testMatch: ['.features-gen/**/*.spec.ts', 'tests/loginStorageState.spec.ts'],
       use: { ...devices['Desktop Chrome'] },
     },
     {
