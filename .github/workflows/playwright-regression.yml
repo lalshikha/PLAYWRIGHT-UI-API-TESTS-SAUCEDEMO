@@ -19,7 +19,15 @@ jobs:
         run: npm ci
 
       - name: Run Playwright tests
-        run: npx playwright test --project=chromium
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/results.json
+        run: npx playwright test --project=chromium --reporter=list,json
+
+      - name: Verify JSON report exists
+        if: ${{ !cancelled() }}
+        run: |
+          ls -lh test-results/results.json
+          node -e "const d = require('./test-results/results.json'); console.log('Suites in results.json:', (d.suites || []).length);"
 
       - name: Upload JSON Report Artifact
         uses: actions/upload-artifact@v4
