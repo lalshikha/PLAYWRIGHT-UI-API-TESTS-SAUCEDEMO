@@ -21,7 +21,7 @@ jobs:
       - name: Run Playwright tests
         env:
           PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/results.json
-        run: npx playwright test --project=chromium --reporter=list,json
+        run: npx playwright test --project=storage-state-setup --project=chromium --reporter=list,json
 
       - name: Verify JSON report exists
         if: ${{ !cancelled() }}
