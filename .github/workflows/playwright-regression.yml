@@ -18,16 +18,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Generate Playwright BDD specs
+        run: npx bddgen
+
       - name: Run Playwright tests
-        env:
-          PLAYWRIGHT_JSON_OUTPUT_NAME: test-results/results.json
-        run: npx playwright test --project=storage-state-setup --project=chromium --reporter=list,json
+        run: npx playwright test --project=storage-state-setup --project=chromium
 
       - name: Verify JSON report exists
         if: ${{ !cancelled() }}
         run: |
           ls -lh test-results/results.json
-          node -e "const d = require('./test-results/results.json'); console.log('Suites in results.json:', (d.suites || []).length);"
+          node -e "const d = require('./test-results/results.json'); console.log('Suites:', (d.suites || []).length, 'Expected:', d.stats?.expected, 'Unexpected:', d.stats?.unexpected, 'Flaky:', d.stats?.flaky, 'Skipped:', d.stats?.skipped);"
 
       - name: Upload JSON Report Artifact
         uses: actions/upload-artifact@v4
