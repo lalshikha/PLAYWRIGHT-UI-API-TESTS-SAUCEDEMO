@@ -16,7 +16,7 @@ export type LocatorDef =
 
 export const L = {
   // Login page
-  login_username: 'username1',
+  login_username: 'username',
   login_password: 'password',
   login_loginButton: {
     primary: 'login-button-old',
