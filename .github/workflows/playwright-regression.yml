@@ -37,3 +37,13 @@ jobs:
           name: playwright-json-report
           path: test-results/results.json
           retention-days: 30
+
+      - name: Upload Visual Diff Artifact
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-visual-diff
+          path: |
+            screenshots/visual/
+            test-results/
+            retention-days: 14
